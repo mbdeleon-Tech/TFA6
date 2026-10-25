@@ -1,6 +1,6 @@
-# Counterpoint POS
+# TFA6 Laravel POS
 
-A four-page Laravel application for **IT0049 TFA5 — From Zero to Four Pages (Laravel POS Foundations)**. It includes a landing page, an about page, Customer Accounts, and User Accounts. Both directories render six fictional records from PHP arrays inside their respective controllers.
+Laravel implementation for **IT0049 TFA6 — From Arrays to Eloquent**. It uses migrations, a seeder, Customer and User Eloquent models, and Blade views for the customer and user directories.
 
 ## Requirements
 
@@ -8,7 +8,7 @@ A four-page Laravel application for **IT0049 TFA5 — From Zero to Four Pages (L
 - Standard Laravel PHP extensions, including ctype, curl, DOM/XML, fileinfo, filter, hash, mbstring, OpenSSL, PCRE, PDO, session, and tokenizer. Enable ZIP for Composer archive extraction.
 - SQLite extensions (`pdo_sqlite` and `sqlite3`) only if you run the optional database migrations.
 
-The interface uses plain CSS in `public/css/app.css`. No Node installation, frontend build, database, or external font service is needed to display the four pages.
+The interface uses plain CSS in `public/css/app.css` and the directory pages read their records from the database through Eloquent.
 
 ## Set up and run
 
@@ -41,23 +41,23 @@ The launcher uses the portable PHP copy in this workspace's `work/php` folder wh
 | `/users` | `UserController::index` | `resources/views/users/index.blade.php` |
 
 - `routes/web.php` defines the four named routes.
-- `app/Http/Controllers/CustomerController.php` defines the customer array and passes it to the customer view.
-- `app/Http/Controllers/UserController.php` defines the user array and passes it to the user view.
+- `app/Http/Controllers/CustomerController.php` retrieves customers with `Customer::query()` and passes them to the customer view.
+- `app/Http/Controllers/UserController.php` retrieves users with `User::query()` and passes them to the user view.
 - Both account views use `@foreach` to generate their table rows. `{{ ... }}` escapes displayed values.
 - `resources/views/layouts/app.blade.php` supplies the common navigation, page header, and footer. The active link uses `aria-current="page"`.
 - The layout adapts to narrow screens. Directory tables scroll horizontally where necessary; keyboard users can focus the table region.
 
-The records are intentionally static and fictional. Update the arrays to change the sample data. Status and role labels are display data; this activity does not implement authentication, permissions, account editing, transactions, inventory management, or checkout. The default `User` model is retained from Laravel's scaffold and is not used by the account directories.
+The records are fictional and are created by the database seeder. The schema follows the activity requirements: customers have `full_name`, `email`, and `phone`; users have a unique `username` and `full_name`.
 
 ## Database migration and seeder files
 
-The assignment asks for database exports **or migration and seeder files**, while explicitly requiring arrays as the temporary data source. This project includes Laravel's scaffold migrations in `database/migrations` and an intentionally empty `database/seeders/DatabaseSeeder.php`. These are supplied for repository completeness; neither directory reads from a database. The seeder creates no accounts or passwords.
+The repository includes migrations in `database/migrations` and a `DatabaseSeeder` that creates five users and five customers with fictional sample data.
 
 To inspect the optional scaffold database on a fresh local setup, enable SQLite extensions and run:
 
 ```powershell
 php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
-php artisan migrate --seed
+php artisan migrate:fresh --seed
 ```
 
 These migrations create Laravel's default users, session, cache, and job tables. They do not contain the displayed customer/staff records. No database export is required for this implementation.
