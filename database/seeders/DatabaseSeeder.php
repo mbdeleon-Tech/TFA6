@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             ['Gabriel Mendoza', 'gabriel.mendoza@example.com', '0917 000 1004'],
             ['Isabella Garcia', 'isabella.garcia@example.com', '0917 000 1005'],
         ] as [$fullName, $email, $phone]) {
-            Customer::query()->create(compact('fullName', 'email', 'phone'));
+            Customer::query()->create(['full_name' => $fullName, 'email' => $email, 'phone' => $phone]);
         }
     }
 }
